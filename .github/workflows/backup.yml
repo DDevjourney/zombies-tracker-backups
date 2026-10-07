@@ -20,9 +20,16 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          curl -sf "$SUPABASE_URL/rest/v1/sessions?select=*&order=created_at.asc" \
-            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
-            -o /tmp/sessions.json
+          base="${SUPABASE_URL%/}"
+          status=$(curl -s -o /tmp/sessions.json -w '%{http_code} %{content_type}' \
+            "$base/rest/v1/sessions?select=*&order=created_at.asc" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+          echo "Respuesta: $status"
+          if ! jq -e 'type == "array"' /tmp/sessions.json >/dev/null 2>&1; then
+            echo "La respuesta no es un array JSON. Primeros bytes:"
+            head -c 300 /tmp/sessions.json; echo
+            exit 1
+          fi
           count=$(jq length /tmp/sessions.json)
           echo "Partidas exportadas: $count"
           # Nunca sobrescribir un backup bueno con uno vacío.

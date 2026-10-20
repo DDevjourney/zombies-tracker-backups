@@ -277,5 +277,14 @@
     "played_at": "2026-10-14",
     "created_at": "2026-10-14T14:34:36.248946+00:00",
     "note": "Las PEM están rotisimas"
+  },
+  {
+    "id": "3290c612-4a67-4813-a27c-f3cbf1cb0879",
+    "game": "bo2",
+    "map": "Pueblo (Pena)",
+    "round": 21,
+    "played_at": "2026-10-19",
+    "created_at": "2026-10-19T21:17:30.664792+00:00",
+    "note": null
   }
 ]
